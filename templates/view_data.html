@@ -1,0 +1,554 @@
+<!--{% load custom_filters %}-->
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8" />-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1" />-->
+<!--    <title>EXCEL REPORT</title>-->
+<!--    <style>-->
+<!--        body {-->
+<!--            font-family: 'Segoe UI', sans-serif;-->
+<!--            background: #f2f4f8;-->
+<!--            color: #333;-->
+<!--            margin: 0; padding: 20px;-->
+<!--        }-->
+<!--        .container {-->
+<!--            max-width: 100%;-->
+<!--            margin: 0 auto;-->
+<!--            background: #fff;-->
+<!--            padding: 25px;-->
+<!--            border-radius: 8px;-->
+<!--            box-shadow: 0 2px 10px rgba(0,0,0,0.05);-->
+<!--            overflow-x: auto;-->
+<!--        }-->
+<!--        h2 {-->
+<!--            margin-bottom: 20px;-->
+<!--            color: #2c3e50;-->
+<!--        }-->
+<!--        form.filters {-->
+<!--            display: flex;-->
+<!--            flex-wrap: wrap;-->
+<!--            gap: 20px;-->
+<!--            align-items: flex-end;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+<!--        form.filters label {-->
+<!--            font-weight: 600;-->
+<!--            display: block;-->
+<!--            margin-bottom: 6px;-->
+<!--        }-->
+<!--        form.filters select {-->
+<!--            padding: 6px 10px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            border-radius: 4px;-->
+<!--            min-width: 160px;-->
+<!--        }-->
+<!--        form.filters button {-->
+<!--            background-color: #2980b9;-->
+<!--            color: white;-->
+<!--            padding: 10px 16px;-->
+<!--            border: none;-->
+<!--            border-radius: 6px;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+<!--        form.filters button:hover {-->
+<!--            background-color: #21618c;-->
+<!--        }-->
+<!--        .download-btn {-->
+<!--            margin-left: auto;-->
+<!--            background-color: #27ae60;-->
+<!--            color: white;-->
+<!--            padding: 10px 16px;-->
+<!--            text-decoration: none;-->
+<!--            border-radius: 6px;-->
+<!--            font-weight: 600;-->
+<!--        }-->
+<!--        .download-btn:hover {-->
+<!--            background-color: #1e8449;-->
+<!--        }-->
+<!--        .table-wrapper {-->
+<!--            overflow-x: auto;-->
+<!--            margin-bottom: 25px;-->
+<!--        }-->
+<!--        table {-->
+<!--            width: max-content;-->
+<!--            min-width: 100%;-->
+<!--            border-collapse: collapse;-->
+<!--            font-size: 14px;-->
+<!--        }-->
+<!--        th, td {-->
+<!--            padding: 8px 10px;-->
+<!--            border: 1px solid #ccc;-->
+<!--            text-align: left;-->
+<!--            white-space: normal;-->
+<!--            word-break: break-word;-->
+<!--            max-width: 300px;-->
+<!--        }-->
+<!--        th {-->
+<!--            background-color: #2980b9;-->
+<!--            color: #fff;-->
+<!--            font-weight: 600;-->
+<!--        }-->
+<!--        tr:nth-child(even) {-->
+<!--            background-color: #f9fbfc;-->
+<!--        }-->
+<!--        tr:hover {-->
+<!--            background-color: #f1f7ff;-->
+<!--        }-->
+<!--        .pagination {-->
+<!--            display: flex;-->
+<!--            justify-content: center;-->
+<!--            gap: 15px;-->
+<!--            font-weight: 600;-->
+<!--        }-->
+<!--        .pagination a {-->
+<!--            padding: 8px 14px;-->
+<!--            border: 1px solid #2980b9;-->
+<!--            border-radius: 5px;-->
+<!--            color: #2980b9;-->
+<!--            text-decoration: none;-->
+<!--        }-->
+<!--        .pagination a:hover {-->
+<!--            background-color: #2980b9;-->
+<!--            color: white;-->
+<!--        }-->
+<!--        .back-btn {-->
+<!--            display: inline-block;-->
+<!--            padding: 10px 20px;-->
+<!--            background-color: #7f8c8d;-->
+<!--            color: white;-->
+<!--            border-radius: 6px;-->
+<!--            text-decoration: none;-->
+<!--        }-->
+<!--        .back-btn:hover {-->
+<!--            background-color: #616d70;-->
+<!--        }-->
+
+<!--        /* Collapsible styles */-->
+<!--        .toggle-more {-->
+<!--            background-color: #f8f9fa;-->
+<!--            color: #2980b9;-->
+<!--            cursor: pointer;-->
+<!--            padding: 5px 10px;-->
+<!--            border: 1px solid #ddd;-->
+<!--            text-align: center;-->
+<!--            font-size: 12px;-->
+<!--            margin: 5px 0;-->
+<!--            border-radius: 4px;-->
+<!--            display: inline-block;-->
+<!--        }-->
+<!--        .toggle-more:hover {-->
+<!--            background-color: #e9ecef;-->
+<!--        }-->
+<!--        .more-rows {-->
+<!--            display: none;-->
+<!--        }-->
+<!--        .payer-section {-->
+<!--            margin-bottom: 15px;-->
+<!--            border-bottom: 1px solid #eee;-->
+<!--            padding-bottom: 15px;-->
+<!--        }-->
+<!--        .payer-title {-->
+<!--            font-weight: bold;-->
+<!--            margin-bottom: 10px;-->
+<!--            color: #2c3e50;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <h2>Excel Reports</h2>-->
+
+<!--    <form method="get" action="{% url 'rcm_app:view_data' upload.id %}" class="filters">-->
+<!--        <div>-->
+<!--            <label for="payer">Payer:</label>-->
+<!--            <select name="payer" id="payer">-->
+<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                {% for p in filter_options.payers %}-->
+<!--                    <option value="{{ p }}" {% if p == selected_filters.payer %}selected{% endif %}>{{ p }}</option>-->
+<!--                {% endfor %}-->
+<!--            </select>-->
+<!--        </div>-->
+
+<!--        <div>-->
+<!--            <label for="payor_category">Payor Category:</label>-->
+<!--            <select name="payor_category" id="payor_category">-->
+<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                {% for cat in filter_options.payor_categories %}-->
+<!--                    <option value="{{ cat }}" {% if cat == selected_filters.payor_category %}selected{% endif %}>{{ cat }}</option>-->
+<!--                {% endfor %}-->
+<!--            </select>-->
+<!--        </div>-->
+
+<!--        <div>-->
+<!--            <label for="edits">EDITS:</label>-->
+<!--            <select name="edits" id="edits">-->
+<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                {% for edit in filter_options.edits %}-->
+<!--                    <option value="{{ edit }}" {% if edit == selected_filters.edits %}selected{% endif %}>{{ edit }}</option>-->
+<!--                {% endfor %}-->
+<!--            </select>-->
+<!--        </div>-->
+
+<!--        <button type="submit">Apply Filters</button>-->
+
+<!--        <a href="{% url 'rcm_app:download_filtered_excel' upload.id %}?payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}" class="download-btn">-->
+<!--            Download Excel-->
+<!--        </a>-->
+<!--    </form>-->
+
+<!--    <div class="table-wrapper">-->
+<!--        <table>-->
+<!--            <thead>-->
+<!--                <tr>-->
+<!--                    {% for column in columns %}-->
+<!--                        <th>{{ column }}</th>-->
+<!--                    {% endfor %}-->
+<!--                </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--                {% regroup data_rows by PAYERS as payer_groups %}-->
+<!--                {% for payer in payer_groups %}-->
+<!--                    <tr class="payer-section">-->
+<!--                        <td colspan="{{ columns|length }}">-->
+<!--                            <div class="payer-title">{{ payer.grouper }}</div>-->
+<!--                        </td>-->
+<!--                    </tr>-->
+
+<!--                    &lt;!&ndash; First row (always visible) &ndash;&gt;-->
+<!--                    <tr>-->
+<!--                        {% for column in columns %}-->
+<!--                            <td>{{ payer.list.0|get_item:column|default:"" }}</td>-->
+<!--                        {% endfor %}-->
+<!--                    </tr>-->
+
+<!--                    &lt;!&ndash; Toggle for remaining rows &ndash;&gt;-->
+<!--                    {% if payer.list|length > 1 %}-->
+<!--                        <tr>-->
+<!--                            <td colspan="{{ columns|length }}">-->
+<!--                                <div class="toggle-more" onclick="toggleRows('more-{{ forloop.counter }}', this)">-->
+<!--                                    Show {{ payer.list|length|add:"-1" }} more items ▼-->
+<!--                                </div>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+
+<!--                        &lt;!&ndash; Remaining rows (hidden by default) &ndash;&gt;-->
+<!--                        <tbody id="more-{{ forloop.counter }}" class="more-rows">-->
+<!--                            {% for row in payer.list|slice:"1:" %}-->
+<!--                                <tr>-->
+<!--                                    {% for column in columns %}-->
+<!--                                        <td>{{ row|get_item:column|default:"" }}</td>-->
+<!--                                    {% endfor %}-->
+<!--                                </tr>-->
+<!--                            {% endfor %}-->
+<!--                        </tbody>-->
+<!--                    {% endif %}-->
+<!--                {% empty %}-->
+<!--                    <tr>-->
+<!--                        <td colspan="{{ columns|length }}">No data available.</td>-->
+<!--                    </tr>-->
+<!--                {% endfor %}-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+
+<!--    <div class="pagination">-->
+<!--        {% if page_obj.has_previous %}-->
+<!--            <a href="?page={{ page_obj.previous_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}">Previous</a>-->
+<!--        {% endif %}-->
+
+<!--        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>-->
+
+<!--        {% if page_obj.has_next %}-->
+<!--            <a href="?page={{ page_obj.next_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}">Next</a>-->
+<!--        {% endif %}-->
+<!--    </div>-->
+
+<!--    <a href="{% url 'rcm_app:home' %}" class="back-btn">← Back to Uploads</a>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    function toggleRows(id, element) {-->
+<!--        var rows = document.getElementById(id);-->
+<!--        if (rows.style.display === "none" || rows.style.display === "") {-->
+<!--            rows.style.display = "table-row-group";-->
+<!--            element.innerHTML = element.innerHTML.replace('▼', '▲').replace('Show', 'Hide');-->
+<!--        } else {-->
+<!--            rows.style.display = "none";-->
+<!--            element.innerHTML = element.innerHTML.replace('▲', '▼').replace('Hide', 'Show');-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upload Details - {{ upload }}</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2f4f8;
+            color: #333;
+            margin: 0; padding: 20px;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+        form.filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+        form.filters label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+        }
+        form.filters select {
+            padding: 6px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            min-width: 160px;
+        }
+        form.filters button {
+            background-color: #2980b9;
+            color: white;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        form.filters button:hover {
+            background-color: #21618c;
+        }
+        .download-btn {
+            margin-left: auto;
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .download-btn:hover {
+            background-color: #1e8449;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 25px;
+        }
+        table {
+            width: max-content;
+            min-width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+            white-space: normal;
+            word-break: break-word;
+            max-width: 300px;
+        }
+        th {
+            background-color: #2980b9;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #f9fbfc;
+        }
+        tr:hover {
+            background-color: #f1f7ff;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #7f8c8d;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            background-color: #616d70;
+        }
+
+         .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-weight: 600;
+        }
+        .pagination a {
+            padding: 8px 14px;
+            border: 1px solid #2980b9;
+            border-radius: 5px;
+            color: #2980b9;
+            text-decoration: none;
+        }
+        .pagination a:hover {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        /* Collapsible styles */
+        .toggle-more {
+            background-color: #f8f9fa;
+            color: #2980b9;
+            cursor: pointer;
+            padding: 4px 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 12px;
+            margin-top: 4px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .toggle-more:hover {
+            background-color: #e9ecef;
+        }
+        .more-rows {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Upload Details: {{ upload }}</h2>
+
+    <form method="get" action="{% url 'rcm_app:view_data' upload.id %}" class="filters">
+        <div>
+            <label for="payer">Payer:</label>
+            <select name="payer" id="payer">
+                <option value="">-- All --</option>
+                {% for p in filter_options.payers %}
+                    <option value="{{ p }}" {% if p == selected_filters.payer %}selected{% endif %}>{{ p }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="payor_category">Payor Category:</label>
+            <select name="payor_category" id="payor_category">
+                <option value="">-- All --</option>
+                {% for cat in filter_options.payor_categories %}
+                    <option value="{{ cat }}" {% if cat == selected_filters.payor_category %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="edits">EDITS:</label>
+            <select name="edits" id="edits">
+                <option value="">-- All --</option>
+                {% for edit in filter_options.edits %}
+                    <option value="{{ edit }}" {% if edit == selected_filters.edits %}selected{% endif %}>{{ edit }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit">Apply Filters</button>
+
+        <a href="{% url 'rcm_app:download_filtered_excel' upload.id %}?payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}" class="download-btn">
+            Download Excel
+        </a>
+    </form>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                        <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% regroup data_rows by PAYERS as payer_groups %}
+                {% for payer in payer_groups %}
+                    <tr>
+                        <td>
+                            <strong>{{ payer.grouper }}</strong> ({{ payer.list|length }} items)<br/>
+                            {% if payer.list|length > 1 %}
+                                <div class="toggle-more" onclick="toggleRows('more-{{ forloop.counter }}', this)">
+                                    Show {{ payer.list|length|add:"-1" }} more ▼
+                                </div>
+                            {% endif %}
+                        </td>
+                        {% for column in columns|slice:"1:" %}
+                            <td>{{ payer.list.0|get_item:column|default:"" }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    {% if payer.list|length > 1 %}
+                        <tbody id="more-{{ forloop.counter }}" class="more-rows">
+                            {% for row in payer.list|slice:"1:" %}
+                                <tr>
+                                    <td></td>
+                                    {% for column in columns|slice:"1:" %}
+                                        <td>{{ row|get_item:column|default:"" }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% endif %}
+                {% empty %}
+                    <tr>
+                        <td colspan="{{ columns|length }}">No data available.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}">Next</a>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'rcm_app:home' %}" class="back-btn">← Back to Uploads</a>
+</div>
+
+<script>
+    function toggleRows(id, element) {
+        var rows = document.getElementById(id);
+        if (rows.style.display === "none" || rows.style.display === "") {
+            rows.style.display = "table-row-group";
+            element.innerHTML = element.innerHTML.replace('▼', '▲').replace('Show', 'Hide');
+        } else {
+            rows.style.display = "none";
+            element.innerHTML = element.innerHTML.replace('▲', '▼').replace('Hide', 'Show');
+        }
+    }
+</script>
+</body>
+</html>
