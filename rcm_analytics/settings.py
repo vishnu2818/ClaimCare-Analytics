@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1%!sa0^18agzt9jiw_4ya#)hnk8h!-gw8-8f@lwnun12sz6pl3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -124,3 +124,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
+
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
