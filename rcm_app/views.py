@@ -281,6 +281,77 @@ def upload_excel(request):
 #     }
 #     return render(request, 'view_data.html', context)
 
+# import pandas as pd
+# from django.shortcuts import render, get_object_or_404
+# from django.core.paginator import Paginator
+# from .models import ExcelData, ExcelUpload
+#
+# def view_uploaded_data(request, upload_id):
+#     upload = get_object_or_404(ExcelUpload, pk=upload_id)
+#     data_qs = ExcelData.objects.filter(upload=upload)
+#     data_list = [row.data for row in data_qs if row.data]
+#
+#     df = pd.DataFrame(data_list)
+#     df.columns = df.columns.str.strip()
+#     df.dropna(axis=1, how='all', inplace=True)
+#     df.fillna('', inplace=True)
+#
+#     for col in df.columns:
+#         if df[col].dtype == object:
+#             df[col] = df[col].str.strip()
+#
+#     # Filters
+#     payer_filter = request.GET.get('payer', '').strip()
+#     payor_category_filter = request.GET.get('payor_category', '').strip()
+#     edits_filter = request.GET.get('edits', '').strip()
+#
+#     if payer_filter and 'PAYERS' in df.columns:
+#         df = df[df['PAYERS'] == payer_filter]
+#     if payor_category_filter and 'Payor Category' in df.columns:
+#         df = df[df['Payor Category'] == payor_category_filter]
+#     if edits_filter and 'EDITS' in df.columns:
+#         df = df[df['EDITS'] == edits_filter]
+#
+#     # Sort by first column
+#     if not df.empty and len(df.columns) > 0:
+#         df[df.columns[0]] = df[df.columns[0]].astype(str)
+#         df.sort_values(by=df.columns[0], inplace=True)
+#
+#     cleaned_data = df.to_dict(orient='records')
+#
+#     # Pagination (chunk size = 500)
+#     paginator = Paginator(cleaned_data, 500)
+#     page_number = request.GET.get('page', 1)
+#     page_obj = paginator.get_page(page_number)
+#
+#     # Full data for dropdown filters
+#     full_df = pd.DataFrame(data_list)
+#     full_df.columns = full_df.columns.str.strip()
+#     full_df.fillna('', inplace=True)
+#     for col in full_df.columns:
+#         if full_df[col].dtype == object:
+#             full_df[col] = full_df[col].str.strip()
+#
+#     filter_options = {
+#         'payers': sorted(full_df['PAYERS'].dropna().unique()) if 'PAYERS' in full_df.columns else [],
+#         'payor_categories': sorted(full_df['Payor Category'].dropna().unique()) if 'Payor Category' in full_df.columns else [],
+#         'edits': sorted(full_df['EDITS'].dropna().unique()) if 'EDITS' in full_df.columns else [],
+#     }
+#
+#     context = {
+#         'upload': upload,
+#         'columns': df.columns,
+#         'data_rows': page_obj.object_list,
+#         'page_obj': page_obj,
+#         'selected_filters': {
+#             'payer': payer_filter,
+#             'payor_category': payor_category_filter,
+#             'edits': edits_filter,
+#         },
+#         'filter_options': filter_options,
+#     }
+#     return render(request, 'view_data.html', context)
+
 import pandas as pd
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
@@ -312,10 +383,7 @@ def view_uploaded_data(request, upload_id):
     if edits_filter and 'EDITS' in df.columns:
         df = df[df['EDITS'] == edits_filter]
 
-    # Sort by first column
-    if not df.empty and len(df.columns) > 0:
-        df[df.columns[0]] = df[df.columns[0]].astype(str)
-        df.sort_values(by=df.columns[0], inplace=True)
+    # Auto sorting removed here
 
     cleaned_data = df.to_dict(orient='records')
 
@@ -351,6 +419,7 @@ def view_uploaded_data(request, upload_id):
         'filter_options': filter_options,
     }
     return render(request, 'view_data.html', context)
+
 
 def download_filtered_excel(request, upload_id):
     upload = get_object_or_404(ExcelUpload, pk=upload_id)
