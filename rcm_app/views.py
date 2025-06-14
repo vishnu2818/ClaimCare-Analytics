@@ -352,6 +352,160 @@ def upload_excel(request):
 #     }
 #     return render(request, 'view_data.html', context)
 
+# import pandas as pd
+# from django.shortcuts import render, get_object_or_404
+# from django.core.paginator import Paginator
+# from .models import ExcelData, ExcelUpload
+#
+# def view_uploaded_data(request, upload_id):
+#     upload = get_object_or_404(ExcelUpload, pk=upload_id)
+#     data_qs = ExcelData.objects.filter(upload=upload)
+#     data_list = [row.data for row in data_qs if row.data]
+#
+#     df = pd.DataFrame(data_list)
+#     df.columns = df.columns.str.strip()
+#     df.dropna(axis=1, how='all', inplace=True)
+#     df.fillna('', inplace=True)
+#
+#     for col in df.columns:
+#         if df[col].dtype == object:
+#             df[col] = df[col].str.strip()
+#
+#     # Filters
+#     payer_filter = request.GET.get('payer', '').strip()
+#     payor_category_filter = request.GET.get('payor_category', '').strip()
+#     edits_filter = request.GET.get('edits', '').strip()
+#
+#     if payer_filter and 'PAYERS' in df.columns:
+#         df = df[df['PAYERS'] == payer_filter]
+#     if payor_category_filter and 'Payor Category' in df.columns:
+#         df = df[df['Payor Category'] == payor_category_filter]
+#     if edits_filter and 'EDITS' in df.columns:
+#         df = df[df['EDITS'] == edits_filter]
+#
+#     # Auto sorting removed here
+#
+#     cleaned_data = df.to_dict(orient='records')
+#
+#     # Pagination (chunk size = 500)
+#     paginator = Paginator(cleaned_data, 500)
+#     page_number = request.GET.get('page', 1)
+#     page_obj = paginator.get_page(page_number)
+#
+#     # Full data for dropdown filters
+#     full_df = pd.DataFrame(data_list)
+#     full_df.columns = full_df.columns.str.strip()
+#     full_df.fillna('', inplace=True)
+#     for col in full_df.columns:
+#         if full_df[col].dtype == object:
+#             full_df[col] = full_df[col].str.strip()
+#
+#     filter_options = {
+#         'payers': sorted(full_df['PAYERS'].dropna().unique()) if 'PAYERS' in full_df.columns else [],
+#         'payor_categories': sorted(full_df['Payor Category'].dropna().unique()) if 'Payor Category' in full_df.columns else [],
+#         'edits': sorted(full_df['EDITS'].dropna().unique()) if 'EDITS' in full_df.columns else [],
+#     }
+#
+#     context = {
+#         'upload': upload,
+#         'columns': df.columns,
+#         'data_rows': page_obj.object_list,
+#         'page_obj': page_obj,
+#         'selected_filters': {
+#             'payer': payer_filter,
+#             'payor_category': payor_category_filter,
+#             'edits': edits_filter,
+#         },
+#         'filter_options': filter_options,
+#     }
+#     return render(request, 'view_data.html', context)
+
+# import pandas as pd
+# from django.shortcuts import render, get_object_or_404
+# from django.core.paginator import Paginator
+# from .models import ExcelData, ExcelUpload
+#
+# def view_uploaded_data(request, upload_id):
+#     upload = get_object_or_404(ExcelUpload, pk=upload_id)
+#     data_qs = ExcelData.objects.filter(upload=upload)
+#     data_list = [row.data for row in data_qs if row.data]
+#
+#     df = pd.DataFrame(data_list)
+#     df.columns = df.columns.str.strip()
+#     df.dropna(axis=1, how='all', inplace=True)
+#     df.fillna('', inplace=True)
+#
+#     for col in df.columns:
+#         if df[col].dtype == object:
+#             df[col] = df[col].str.strip()
+#
+#     # Filters from request
+#     payer_filter = request.GET.get('payer', '').strip()
+#     payor_category_filter = request.GET.get('payor_category', '').strip()
+#     edits_filter = request.GET.get('edits', '').strip()
+#     lcode_filter = request.GET.get('l_code', '').strip()
+#     ecode_filter = request.GET.get('e_code', '').strip()
+#     acode_filter = request.GET.get('a_code', '').strip()
+#     kcode_filter = request.GET.get('k_code', '').strip()
+#
+#     # Apply filters
+#     if payer_filter and 'PAYERS' in df.columns:
+#         df = df[df['PAYERS'] == payer_filter]
+#     if payor_category_filter and 'Payor Category' in df.columns:
+#         df = df[df['Payor Category'] == payor_category_filter]
+#     if edits_filter and 'EDITS' in df.columns:
+#         df = df[df['EDITS'] == edits_filter]
+#     if lcode_filter and 'L Codes' in df.columns:
+#         df = df[df['L Codes'] == lcode_filter]
+#     if ecode_filter and 'E Codes' in df.columns:
+#         df = df[df['E Codes'] == ecode_filter]
+#     if acode_filter and 'A Codes' in df.columns:
+#         df = df[df['A Codes'] == acode_filter]
+#     if kcode_filter and 'K CODES' in df.columns:
+#         df = df[df['K CODES'] == kcode_filter]
+#
+#     cleaned_data = df.to_dict(orient='records')
+#
+#     # Pagination
+#     paginator = Paginator(cleaned_data, 500)
+#     page_number = request.GET.get('page', 1)
+#     page_obj = paginator.get_page(page_number)
+#
+#     # Get filter options
+#     full_df = pd.DataFrame(data_list)
+#     full_df.columns = full_df.columns.str.strip()
+#     full_df.fillna('', inplace=True)
+#     for col in full_df.columns:
+#         if full_df[col].dtype == object:
+#             full_df[col] = full_df[col].str.strip()
+#
+#     filter_options = {
+#         'payers': sorted(full_df['PAYERS'].dropna().unique()) if 'PAYERS' in full_df.columns else [],
+#         'payor_categories': sorted(full_df['Payor Category'].dropna().unique()) if 'Payor Category' in full_df.columns else [],
+#         'edits': sorted(full_df['EDITS'].dropna().unique()) if 'EDITS' in full_df.columns else [],
+#         'l_codes': sorted(full_df['L Codes'].dropna().unique()) if 'L Codes' in full_df.columns else [],
+#         'e_codes': sorted(full_df['E Codes'].dropna().unique()) if 'E Codes' in full_df.columns else [],
+#         'a_codes': sorted(full_df['A Codes'].dropna().unique()) if 'A Codes' in full_df.columns else [],
+#         'k_codes': sorted(full_df['K CODES'].dropna().unique()) if 'K CODES' in full_df.columns else [],
+#     }
+#
+#     context = {
+#         'upload': upload,
+#         'columns': df.columns,
+#         'data_rows': page_obj.object_list,
+#         'page_obj': page_obj,
+#         'selected_filters': {
+#             'payer': payer_filter,
+#             'payor_category': payor_category_filter,
+#             'edits': edits_filter,
+#             'l_code': lcode_filter,
+#             'e_code': ecode_filter,
+#             'a_code': acode_filter,
+#             'k_code': kcode_filter,
+#         },
+#         'filter_options': filter_options,
+#     }
+#     return render(request, 'view_data.html', context)
 import pandas as pd
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
@@ -371,28 +525,44 @@ def view_uploaded_data(request, upload_id):
         if df[col].dtype == object:
             df[col] = df[col].str.strip()
 
-    # Filters
+    # Filters from request
     payer_filter = request.GET.get('payer', '').strip()
     payor_category_filter = request.GET.get('payor_category', '').strip()
     edits_filter = request.GET.get('edits', '').strip()
+    lcode_filter = request.GET.get('l_code', '').strip()
+    ecode_filter = request.GET.get('e_code', '').strip()
+    acode_filter = request.GET.get('a_code', '').strip()
+    kcode_filter = request.GET.get('k_code', '').strip()
+    code_search = request.GET.get('search_code', '').strip().upper()
 
+    # Apply individual dropdown filters
     if payer_filter and 'PAYERS' in df.columns:
         df = df[df['PAYERS'] == payer_filter]
     if payor_category_filter and 'Payor Category' in df.columns:
         df = df[df['Payor Category'] == payor_category_filter]
     if edits_filter and 'EDITS' in df.columns:
         df = df[df['EDITS'] == edits_filter]
+    if lcode_filter and 'L Codes' in df.columns:
+        df = df[df['L Codes'] == lcode_filter]
+    if ecode_filter and 'E Codes' in df.columns:
+        df = df[df['E Codes'] == ecode_filter]
+    if acode_filter and 'A Codes' in df.columns:
+        df = df[df['A Codes'] == acode_filter]
+    if kcode_filter and 'K CODES' in df.columns:
+        df = df[df['K CODES'] == kcode_filter]
 
-    # Auto sorting removed here
+    # ✅ Apply global search (partial match in any column)
+    if code_search:
+        df = df[df.apply(lambda row: row.astype(str).str.upper().str.contains(code_search, na=False).any(), axis=1)]
 
     cleaned_data = df.to_dict(orient='records')
 
-    # Pagination (chunk size = 500)
+    # Pagination
     paginator = Paginator(cleaned_data, 500)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
-    # Full data for dropdown filters
+    # Prepare dropdown values
     full_df = pd.DataFrame(data_list)
     full_df.columns = full_df.columns.str.strip()
     full_df.fillna('', inplace=True)
@@ -404,6 +574,10 @@ def view_uploaded_data(request, upload_id):
         'payers': sorted(full_df['PAYERS'].dropna().unique()) if 'PAYERS' in full_df.columns else [],
         'payor_categories': sorted(full_df['Payor Category'].dropna().unique()) if 'Payor Category' in full_df.columns else [],
         'edits': sorted(full_df['EDITS'].dropna().unique()) if 'EDITS' in full_df.columns else [],
+        'l_codes': sorted(full_df['L Codes'].dropna().unique()) if 'L Codes' in full_df.columns else [],
+        'e_codes': sorted(full_df['E Codes'].dropna().unique()) if 'E Codes' in full_df.columns else [],
+        'a_codes': sorted(full_df['A Codes'].dropna().unique()) if 'A Codes' in full_df.columns else [],
+        'k_codes': sorted(full_df['K CODES'].dropna().unique()) if 'K CODES' in full_df.columns else [],
     }
 
     context = {
@@ -415,10 +589,17 @@ def view_uploaded_data(request, upload_id):
             'payer': payer_filter,
             'payor_category': payor_category_filter,
             'edits': edits_filter,
+            'l_code': lcode_filter,
+            'e_code': ecode_filter,
+            'a_code': acode_filter,
+            'k_code': kcode_filter,
+            'search_code': code_search,
         },
         'filter_options': filter_options,
     }
     return render(request, 'view_data.html', context)
+
+
 
 
 def download_filtered_excel(request, upload_id):
