@@ -1,6 +1,5 @@
+
 <!--{% load custom_filters %}-->
-
-
 
 <!--<!DOCTYPE html>-->
 <!--<html lang="en">-->
@@ -22,43 +21,50 @@
 <!--            padding: 25px;-->
 <!--            border-radius: 8px;-->
 <!--            box-shadow: 0 2px 10px rgba(0,0,0,0.05);-->
-<!--            overflow-x: auto;-->
 <!--        }-->
 <!--        h2 {-->
 <!--            margin-bottom: 20px;-->
 <!--            color: #2c3e50;-->
 <!--        }-->
-<!--        form.filters {-->
-<!--            display: flex;-->
-<!--            flex-wrap: wrap;-->
-<!--            gap: 20px;-->
-<!--            align-items: flex-end;-->
+
+<!--        .filter-card {-->
+<!--            background-color: #ffffff;-->
+<!--            border: 1px solid #e0e0e0;-->
+<!--            padding: 20px;-->
+<!--            border-radius: 10px;-->
 <!--            margin-bottom: 20px;-->
+<!--            box-shadow: 0 2px 6px rgba(0,0,0,0.05);-->
 <!--        }-->
-<!--        form.filters label {-->
+
+<!--        .filter-grid {-->
+<!--            display: grid;-->
+<!--            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));-->
+<!--            gap: 20px;-->
+<!--        }-->
+
+<!--        .filter-grid label {-->
 <!--            font-weight: 600;-->
+<!--            margin-bottom: 5px;-->
 <!--            display: block;-->
-<!--            margin-bottom: 6px;-->
 <!--        }-->
-<!--        form.filters select {-->
-<!--            padding: 6px 10px;-->
+
+<!--        .filters-actions {-->
+<!--            display: flex;-->
+<!--            justify-content: space-between;-->
+<!--            align-items: center;-->
+<!--            flex-wrap: wrap;-->
+<!--            margin-top: 20px;-->
+<!--            gap: 10px;-->
+<!--        }-->
+
+<!--        input[type="text"], select {-->
+<!--            width: 100%;-->
+<!--            padding: 8px;-->
 <!--            border: 1px solid #ccc;-->
-<!--            border-radius: 4px;-->
-<!--            min-width: 160px;-->
+<!--            border-radius: 5px;-->
 <!--        }-->
-<!--        form.filters button {-->
-<!--            background-color: #2980b9;-->
-<!--            color: white;-->
-<!--            padding: 10px 16px;-->
-<!--            border: none;-->
-<!--            border-radius: 6px;-->
-<!--            cursor: pointer;-->
-<!--        }-->
-<!--        form.filters button:hover {-->
-<!--            background-color: #21618c;-->
-<!--        }-->
+
 <!--        .download-btn {-->
-<!--            margin-left: auto;-->
 <!--            background-color: #27ae60;-->
 <!--            color: white;-->
 <!--            padding: 10px 16px;-->
@@ -66,38 +72,103 @@
 <!--            border-radius: 6px;-->
 <!--            font-weight: 600;-->
 <!--        }-->
+
 <!--        .download-btn:hover {-->
 <!--            background-color: #1e8449;-->
 <!--        }-->
+
+<!--        .apply-btn {-->
+<!--            background-color: #2980b9;-->
+<!--            color: white;-->
+<!--            padding: 10px 16px;-->
+<!--            border: none;-->
+<!--            border-radius: 6px;-->
+<!--            font-weight: 600;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .apply-btn:hover {-->
+<!--            background-color: #21618c;-->
+<!--        }-->
+
+<!--        .scroll-buttons {-->
+<!--            text-align: right;-->
+<!--            margin-bottom: 10px;-->
+<!--        }-->
+
+<!--        .scroll-buttons button {-->
+<!--            background-color: #2980b9;-->
+<!--            color: white;-->
+<!--            border: none;-->
+<!--            padding: 8px 12px;-->
+<!--            margin-left: 6px;-->
+<!--            border-radius: 4px;-->
+<!--            cursor: pointer;-->
+<!--            font-weight: 600;-->
+<!--        }-->
+
+<!--        .scroll-buttons button:hover {-->
+<!--            background-color: #21618c;-->
+<!--        }-->
+
 <!--        .table-wrapper {-->
 <!--            overflow-x: auto;-->
-<!--            margin-bottom: 25px;-->
+<!--            scroll-behavior: smooth;-->
+<!--            max-height: 500px;-->
+<!--            border: 1px solid #ddd;-->
 <!--        }-->
+
 <!--        table {-->
+<!--            border-collapse: collapse;-->
 <!--            width: max-content;-->
 <!--            min-width: 100%;-->
-<!--            border-collapse: collapse;-->
 <!--            font-size: 14px;-->
 <!--        }-->
-<!--        th, td {-->
+
+<!--        thead th {-->
+<!--            position: sticky;-->
+<!--            top: 0;-->
+<!--            background-color: #2980b9;-->
+<!--            color: white;-->
+<!--            z-index: 2;-->
 <!--            padding: 8px 10px;-->
 <!--            border: 1px solid #ccc;-->
-<!--            text-align: left;-->
+<!--        }-->
+
+<!--        tbody td {-->
+<!--            padding: 8px 10px;-->
+<!--            border: 1px solid #ccc;-->
 <!--            white-space: normal;-->
 <!--            word-break: break-word;-->
 <!--            max-width: 300px;-->
 <!--        }-->
-<!--        th {-->
-<!--            background-color: #2980b9;-->
-<!--            color: #fff;-->
-<!--            font-weight: 600;-->
-<!--        }-->
+
+<!--      th:first-child {-->
+<!--    position: sticky;-->
+<!--    top: 0;-->
+<!--    left: 0;-->
+<!--    background-color: #2980b9;-->
+<!--    color: white;-->
+<!--    z-index: 3;-->
+<!--    font-weight: 600;-->
+<!--}-->
+
+<!--td:first-child {-->
+<!--    position: sticky;-->
+<!--    left: 0;-->
+<!--    background-color: #f4f6f9;-->
+<!--    z-index: 1;-->
+<!--    font-weight: bold;-->
+<!--}-->
+
 <!--        tr:nth-child(even) {-->
 <!--            background-color: #f9fbfc;-->
 <!--        }-->
+
 <!--        tr:hover {-->
 <!--            background-color: #f1f7ff;-->
 <!--        }-->
+
 <!--        .back-btn {-->
 <!--            display: inline-block;-->
 <!--            padding: 10px 20px;-->
@@ -106,16 +177,19 @@
 <!--            border-radius: 6px;-->
 <!--            text-decoration: none;-->
 <!--        }-->
+
 <!--        .back-btn:hover {-->
 <!--            background-color: #616d70;-->
 <!--        }-->
 
-<!--         .pagination {-->
+<!--        .pagination {-->
 <!--            display: flex;-->
 <!--            justify-content: center;-->
 <!--            gap: 15px;-->
 <!--            font-weight: 600;-->
+<!--            margin-top: 20px;-->
 <!--        }-->
+
 <!--        .pagination a {-->
 <!--            padding: 8px 14px;-->
 <!--            border: 1px solid #2980b9;-->
@@ -123,12 +197,12 @@
 <!--            color: #2980b9;-->
 <!--            text-decoration: none;-->
 <!--        }-->
+
 <!--        .pagination a:hover {-->
 <!--            background-color: #2980b9;-->
 <!--            color: white;-->
 <!--        }-->
 
-<!--        /* Collapsible styles */-->
 <!--        .toggle-more {-->
 <!--            background-color: #f8f9fa;-->
 <!--            color: #2980b9;-->
@@ -141,162 +215,101 @@
 <!--            border-radius: 4px;-->
 <!--            display: inline-block;-->
 <!--        }-->
+
 <!--        .toggle-more:hover {-->
 <!--            background-color: #e9ecef;-->
 <!--        }-->
+
 <!--        .more-rows {-->
 <!--            display: none;-->
 <!--        }-->
-<!--.filters-group {-->
-<!--    display: flex;-->
-<!--    flex-wrap: wrap;-->
-<!--    gap: 20px;-->
-<!--    width: 100%;-->
-<!--    padding: 16px;-->
-<!--    background-color: #f7f9fb;-->
-<!--    border: 1px solid #e1e4e8;-->
-<!--    border-radius: 8px;-->
-<!--    margin-bottom: 20px;-->
-<!--}-->
-
-<!--.filters-group > div {-->
-<!--    flex: 1 1 220px; /* Responsive minimum width */-->
-<!--    max-width: 250px;-->
-<!--}-->
-
-<!--.filters-actions {-->
-<!--    display: flex;-->
-<!--    flex-wrap: wrap;-->
-<!--    align-items: center;-->
-<!--    gap: 15px;-->
-<!--    margin-top: 10px;-->
-<!--}-->
-<!--.filter-card {-->
-<!--    background-color: #ffffff;-->
-<!--    border: 1px solid #e0e0e0;-->
-<!--    padding: 20px;-->
-<!--    border-radius: 10px;-->
-<!--    margin-bottom: 20px;-->
-<!--    box-shadow: 0 2px 6px rgba(0,0,0,0.05);-->
-<!--}-->
-
-<!--.filter-grid {-->
-<!--    display: grid;-->
-<!--    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));-->
-<!--    gap: 20px;-->
-<!--}-->
-
-<!--.filter-grid label {-->
-<!--    font-weight: 600;-->
-<!--    margin-bottom: 5px;-->
-<!--    display: block;-->
-<!--}-->
-
-<!--.filters-actions {-->
-<!--    display: flex;-->
-<!--    justify-content: space-between;-->
-<!--    align-items: center;-->
-<!--    flex-wrap: wrap;-->
-<!--    margin-top: 20px;-->
-<!--    gap: 10px;-->
-<!--}-->
-
-<!--input[type="text"], select {-->
-<!--    width: 100%;-->
-<!--    padding: 8px;-->
-<!--    border: 1px solid #ccc;-->
-<!--    border-radius: 5px;-->
-<!--}-->
-
-
 <!--    </style>-->
 <!--</head>-->
 <!--<body>-->
 <!--<div class="container">-->
 <!--    <h2>Upload Details: {{ upload }}</h2>-->
 
-<!--    <form method="get" action="{% url 'rcm_app:view_data' upload.id %}" class="filters">-->
-<!--        <div>-->
-<!--            <label for="payer">Payer:</label>-->
-<!--            <select name="payer" id="payer">-->
-<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
-<!--                {% for p in filter_options.payers %}-->
-<!--                    <option value="{{ p }}" {% if p == selected_filters.payer %}selected{% endif %}>{{ p }}</option>-->
-<!--                {% endfor %}-->
-<!--            </select>-->
+<!--    <form method="get" action="{% url 'rcm_app:view_data' upload.id %}" class="filter-card">-->
+<!--        <div class="filter-grid">-->
+<!--            <div>-->
+<!--                <label for="payer">Payer</label>-->
+<!--                <select name="payer" id="payer">-->
+<!--                    <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                    {% for p in filter_options.payers %}-->
+<!--                        <option value="{{ p }}" {% if p == selected_filters.payer %}selected{% endif %}>{{ p }}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="payor_category">Payor Category</label>-->
+<!--                <select name="payor_category" id="payor_category">-->
+<!--                    <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                    {% for cat in filter_options.payor_categories %}-->
+<!--                        <option value="{{ cat }}" {% if cat == selected_filters.payor_category %}selected{% endif %}>{{ cat }}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="edits">EDITS</label>-->
+<!--                <select name="edits" id="edits">-->
+<!--                    <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                    {% for edit in filter_options.edits %}-->
+<!--                        <option value="{{ edit }}" {% if edit == selected_filters.edits %}selected{% endif %}>{{ edit }}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="l_code">L Codes</label>-->
+<!--                <select name="l_code" id="l_code">-->
+<!--                    <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                    {% for l in filter_options.l_codes %}-->
+<!--                        <option value="{{ l }}" {% if l == selected_filters.l_code %}selected{% endif %}>{{ l }}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="e_code">E Codes</label>-->
+<!--                <select name="e_code" id="e_code">-->
+<!--                    <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                    {% for e in filter_options.e_codes %}-->
+<!--                        <option value="{{ e }}" {% if e == selected_filters.e_code %}selected{% endif %}>{{ e }}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="a_code">A Codes</label>-->
+<!--                <select name="a_code" id="a_code">-->
+<!--                    <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                    {% for a in filter_options.a_codes %}-->
+<!--                        <option value="{{ a }}" {% if a == selected_filters.a_code %}selected{% endif %}>{{ a }}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="k_code">K CODES</label>-->
+<!--                <select name="k_code" id="k_code">-->
+<!--                    <option value="">&#45;&#45; All &#45;&#45;</option>-->
+<!--                    {% for k in filter_options.k_codes %}-->
+<!--                        <option value="{{ k }}" {% if k == selected_filters.k_code %}selected{% endif %}>{{ k }}</option>-->
+<!--                    {% endfor %}-->
+<!--                </select>-->
+<!--            </div>-->
+<!--            <div>-->
+<!--                <label for="search_code">Search Code</label>-->
+<!--                <input type="text" id="search_code" name="search_code" value="{{ selected_filters.search_code }}" placeholder="e.g. A7030">-->
+<!--            </div>-->
 <!--        </div>-->
 
-<!--        <div>-->
-<!--            <label for="payor_category">Payor Category:</label>-->
-<!--            <select name="payor_category" id="payor_category">-->
-<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
-<!--                {% for cat in filter_options.payor_categories %}-->
-<!--                    <option value="{{ cat }}" {% if cat == selected_filters.payor_category %}selected{% endif %}>{{ cat }}</option>-->
-<!--                {% endfor %}-->
-<!--            </select>-->
+<!--        <div class="filters-actions">-->
+<!--            <button type="submit" class="apply-btn">Apply Filters</button>-->
+<!--            <a href="{% url 'rcm_app:download_filtered_excel' upload.id %}?payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}&search_code={{ selected_filters.search_code }}" class="download-btn">Download Excel</a>-->
 <!--        </div>-->
-
-<!--        <div>-->
-<!--            <label for="edits">EDITS:</label>-->
-<!--            <select name="edits" id="edits">-->
-<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
-<!--                {% for edit in filter_options.edits %}-->
-<!--                    <option value="{{ edit }}" {% if edit == selected_filters.edits %}selected{% endif %}>{{ edit }}</option>-->
-<!--                {% endfor %}-->
-<!--            </select>-->
-<!--        </div>-->
-
-<!--        <div>-->
-<!--            <label for="l_code">L Codes:</label>-->
-<!--            <select name="l_code" id="l_code">-->
-<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
-<!--                {% for l in filter_options.l_codes %}-->
-<!--                    <option value="{{ l }}" {% if l == selected_filters.l_code %}selected{% endif %}>{{ l }}</option>-->
-<!--                {% endfor %}-->
-<!--            </select>-->
-<!--        </div>-->
-
-<!--        <div>-->
-<!--            <label for="e_code">E Codes:</label>-->
-<!--            <select name="e_code" id="e_code">-->
-<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
-<!--                {% for e in filter_options.e_codes %}-->
-<!--                    <option value="{{ e }}" {% if e == selected_filters.e_code %}selected{% endif %}>{{ e }}</option>-->
-<!--                {% endfor %}-->
-<!--            </select>-->
-<!--        </div>-->
-
-<!--        <div>-->
-<!--            <label for="a_code">A Codes:</label>-->
-<!--            <select name="a_code" id="a_code">-->
-<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
-<!--                {% for a in filter_options.a_codes %}-->
-<!--                    <option value="{{ a }}" {% if a == selected_filters.a_code %}selected{% endif %}>{{ a }}</option>-->
-<!--                {% endfor %}-->
-<!--            </select>-->
-<!--        </div>-->
-
-
-<!--        <div>-->
-<!--            <label for="k_code">K CODES:</label>-->
-<!--            <select name="k_code" id="k_code">-->
-<!--                <option value="">&#45;&#45; All &#45;&#45;</option>-->
-<!--                {% for k in filter_options.k_codes %}-->
-<!--                    <option value="{{ k }}" {% if k == selected_filters.k_code %}selected{% endif %}>{{ k }}</option>-->
-<!--                {% endfor %}-->
-<!--            </select>-->
-<!--        </div>-->
-<!--        <div>-->
-<!--    <label for="search_code">Search Code:</label>-->
-<!--    <input type="text" id="search_code" name="search_code" value="{{ selected_filters.search_code }}" placeholder="e.g. A7030" style="padding:6px 10px; border:1px solid #ccc; border-radius:4px; min-width:160px;">-->
-<!--</div>-->
-
-<!--        <button type="submit">Apply Filters</button>-->
-
-<!--        <a href="{% url 'rcm_app:download_filtered_excel' upload.id %}?payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}" class="download-btn">-->
-<!--            Download Excel-->
-<!--        </a>-->
 <!--    </form>-->
+
+<!--    <div class="scroll-buttons">-->
+<!--        <button onclick="scrollTable(-300)">← Scroll Left</button>-->
+<!--        <button onclick="scrollTable(300)">Scroll Right →</button>-->
+<!--    </div>-->
 
 <!--    <div class="table-wrapper">-->
 <!--        <table>-->
@@ -323,7 +336,6 @@
 <!--                            <td>{{ payer.list.0|get_item:column|default:"" }}</td>-->
 <!--                        {% endfor %}-->
 <!--                    </tr>-->
-
 <!--                    {% if payer.list|length > 1 %}-->
 <!--                        <tbody id="more-{{ forloop.counter }}" class="more-rows">-->
 <!--                            {% for row in payer.list|slice:"1:" %}-->
@@ -347,13 +359,11 @@
 
 <!--    <div class="pagination">-->
 <!--        {% if page_obj.has_previous %}-->
-<!--            <a href="?page={{ page_obj.previous_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}">Previous</a>-->
+<!--            <a href="?page={{ page_obj.previous_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}&search_code={{ selected_filters.search_code }}">Previous</a>-->
 <!--        {% endif %}-->
-
 <!--        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>-->
-
 <!--        {% if page_obj.has_next %}-->
-<!--            <a href="?page={{ page_obj.next_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}">Next</a>-->
+<!--            <a href="?page={{ page_obj.next_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}&search_code={{ selected_filters.search_code }}">Next</a>-->
 <!--        {% endif %}-->
 <!--    </div>-->
 
@@ -362,7 +372,7 @@
 
 <!--<script>-->
 <!--    function toggleRows(id, element) {-->
-<!--        var rows = document.getElementById(id);-->
+<!--        const rows = document.getElementById(id);-->
 <!--        if (rows.style.display === "none" || rows.style.display === "") {-->
 <!--            rows.style.display = "table-row-group";-->
 <!--            element.innerHTML = element.innerHTML.replace('▼', '▲').replace('Show', 'Hide');-->
@@ -370,6 +380,11 @@
 <!--            rows.style.display = "none";-->
 <!--            element.innerHTML = element.innerHTML.replace('▲', '▼').replace('Hide', 'Show');-->
 <!--        }-->
+<!--    }-->
+
+<!--    function scrollTable(distance) {-->
+<!--        const wrapper = document.querySelector('.table-wrapper');-->
+<!--        wrapper.scrollBy({ left: distance, behavior: 'smooth' });-->
 <!--    }-->
 <!--</script>-->
 <!--</body>-->
@@ -387,7 +402,8 @@
             font-family: 'Segoe UI', sans-serif;
             background: #f2f4f8;
             color: #333;
-            margin: 0; padding: 20px;
+            margin: 0;
+            padding: 20px;
         }
         .container {
             max-width: 100%;
@@ -401,7 +417,6 @@
             margin-bottom: 20px;
             color: #2c3e50;
         }
-
         .filter-card {
             background-color: #ffffff;
             border: 1px solid #e0e0e0;
@@ -410,19 +425,16 @@
             margin-bottom: 20px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
-
         .filter-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
         }
-
         .filter-grid label {
             font-weight: 600;
             margin-bottom: 5px;
             display: block;
         }
-
         .filters-actions {
             display: flex;
             justify-content: space-between;
@@ -431,14 +443,12 @@
             margin-top: 20px;
             gap: 10px;
         }
-
         input[type="text"], select {
             width: 100%;
             padding: 8px;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-
         .download-btn {
             background-color: #27ae60;
             color: white;
@@ -447,11 +457,9 @@
             border-radius: 6px;
             font-weight: 600;
         }
-
         .download-btn:hover {
             background-color: #1e8449;
         }
-
         .apply-btn {
             background-color: #2980b9;
             color: white;
@@ -461,16 +469,13 @@
             font-weight: 600;
             cursor: pointer;
         }
-
         .apply-btn:hover {
             background-color: #21618c;
         }
-
         .scroll-buttons {
             text-align: right;
             margin-bottom: 10px;
         }
-
         .scroll-buttons button {
             background-color: #2980b9;
             color: white;
@@ -481,25 +486,21 @@
             cursor: pointer;
             font-weight: 600;
         }
-
         .scroll-buttons button:hover {
             background-color: #21618c;
         }
-
         .table-wrapper {
             overflow-x: auto;
             scroll-behavior: smooth;
             max-height: 500px;
             border: 1px solid #ddd;
         }
-
         table {
             border-collapse: collapse;
             width: max-content;
             min-width: 100%;
             font-size: 14px;
         }
-
         thead th {
             position: sticky;
             top: 0;
@@ -509,7 +510,6 @@
             padding: 8px 10px;
             border: 1px solid #ccc;
         }
-
         tbody td {
             padding: 8px 10px;
             border: 1px solid #ccc;
@@ -517,33 +517,28 @@
             word-break: break-word;
             max-width: 300px;
         }
-
-      th:first-child {
-    position: sticky;
-    top: 0;
-    left: 0;
-    background-color: #2980b9;
-    color: white;
-    z-index: 3;
-    font-weight: 600;
-}
-
-td:first-child {
-    position: sticky;
-    left: 0;
-    background-color: #f4f6f9;
-    z-index: 1;
-    font-weight: bold;
-}
-
+        th:first-child {
+            position: sticky;
+            top: 0;
+            left: 0;
+            background-color: #2980b9;
+            color: white;
+            z-index: 3;
+            font-weight: 600;
+        }
+        td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #f4f6f9;
+            z-index: 1;
+            font-weight: bold;
+        }
         tr:nth-child(even) {
             background-color: #f9fbfc;
         }
-
         tr:hover {
             background-color: #f1f7ff;
         }
-
         .back-btn {
             display: inline-block;
             padding: 10px 20px;
@@ -552,11 +547,9 @@ td:first-child {
             border-radius: 6px;
             text-decoration: none;
         }
-
         .back-btn:hover {
             background-color: #616d70;
         }
-
         .pagination {
             display: flex;
             justify-content: center;
@@ -564,7 +557,6 @@ td:first-child {
             font-weight: 600;
             margin-top: 20px;
         }
-
         .pagination a {
             padding: 8px 14px;
             border: 1px solid #2980b9;
@@ -572,12 +564,10 @@ td:first-child {
             color: #2980b9;
             text-decoration: none;
         }
-
         .pagination a:hover {
             background-color: #2980b9;
             color: white;
         }
-
         .toggle-more {
             background-color: #f8f9fa;
             color: #2980b9;
@@ -590,11 +580,9 @@ td:first-child {
             border-radius: 4px;
             display: inline-block;
         }
-
         .toggle-more:hover {
             background-color: #e9ecef;
         }
-
         .more-rows {
             display: none;
         }
@@ -633,51 +621,26 @@ td:first-child {
                     {% endfor %}
                 </select>
             </div>
+<div>
+    <label for="code_category">Code Category</label>
+    <select name="code_category" id="code_category">
+        <option value="">-- All --</option>
+        <option value="L CODES" {% if selected_filters.code_category == "L CODES" %}selected{% endif %}>L CODES</option>
+        <option value="E CODES" {% if selected_filters.code_category == "E CODES" %}selected{% endif %}>E CODES</option>
+        <option value="A CODES" {% if selected_filters.code_category == "A CODES" %}selected{% endif %}>A CODES</option>
+        <option value="K CODES" {% if selected_filters.code_category == "K CODES" %}selected{% endif %}>K CODES</option>
+    </select>
+</div>
+
             <div>
-                <label for="l_code">L Codes</label>
-                <select name="l_code" id="l_code">
-                    <option value="">-- All --</option>
-                    {% for l in filter_options.l_codes %}
-                        <option value="{{ l }}" {% if l == selected_filters.l_code %}selected{% endif %}>{{ l }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="e_code">E Codes</label>
-                <select name="e_code" id="e_code">
-                    <option value="">-- All --</option>
-                    {% for e in filter_options.e_codes %}
-                        <option value="{{ e }}" {% if e == selected_filters.e_code %}selected{% endif %}>{{ e }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="a_code">A Codes</label>
-                <select name="a_code" id="a_code">
-                    <option value="">-- All --</option>
-                    {% for a in filter_options.a_codes %}
-                        <option value="{{ a }}" {% if a == selected_filters.a_code %}selected{% endif %}>{{ a }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="k_code">K CODES</label>
-                <select name="k_code" id="k_code">
-                    <option value="">-- All --</option>
-                    {% for k in filter_options.k_codes %}
-                        <option value="{{ k }}" {% if k == selected_filters.k_code %}selected{% endif %}>{{ k }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div>
-                <label for="search_code">Search Code</label>
-                <input type="text" id="search_code" name="search_code" value="{{ selected_filters.search_code }}" placeholder="e.g. A7030">
+                <label for="code_value">Enter Code</label>
+                <input type="text" name="code_value" id="code_value" value="{{ selected_filters.code_value }}" placeholder="e.g. A7030 or L3923">
             </div>
         </div>
 
         <div class="filters-actions">
             <button type="submit" class="apply-btn">Apply Filters</button>
-            <a href="{% url 'rcm_app:download_filtered_excel' upload.id %}?payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}&search_code={{ selected_filters.search_code }}" class="download-btn">Download Excel</a>
+            <a href="{% url 'rcm_app:download_filtered_excel' upload.id %}?payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&code_category={{ selected_filters.code_category }}&code_value={{ selected_filters.code_value }}" class="download-btn">Download Excel</a>
         </div>
     </form>
 
@@ -734,11 +697,11 @@ td:first-child {
 
     <div class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}&search_code={{ selected_filters.search_code }}">Previous</a>
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
         {% endif %}
         <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}&payer={{ selected_filters.payer }}&payor_category={{ selected_filters.payor_category }}&edits={{ selected_filters.edits }}&l_code={{ selected_filters.l_code }}&e_code={{ selected_filters.e_code }}&a_code={{ selected_filters.a_code }}&k_code={{ selected_filters.k_code }}&search_code={{ selected_filters.search_code }}">Next</a>
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
         {% endif %}
     </div>
 
