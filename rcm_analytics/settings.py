@@ -123,3 +123,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 LOGIN_URL = 'rcm_app:login'
 LOGIN_REDIRECT_URL = 'rcm_app:home'
 LOGOUT_REDIRECT_URL = 'rcm_app:login'
+
+
+# Add for Render deployment
+if os.getenv('RENDER'):
+    DEBUG = False
