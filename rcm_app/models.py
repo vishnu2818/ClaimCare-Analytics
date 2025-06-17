@@ -3,6 +3,7 @@ from django.db import models
 
 
 class PayerCodeInfo(models.Model):
+    upload = models.ForeignKey('ExcelUpload', on_delete=models.CASCADE, null=True, blank=True)
     # Basic Info
     payers = models.CharField(max_length=100, null=True, blank=True)
     payor_category = models.CharField(max_length=100, null=True, blank=True)
