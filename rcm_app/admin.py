@@ -1,6 +1,12 @@
 from django.contrib import admin
-from .models import ExcelUpload, ExcelData
+from .models import *
 from django.utils.html import format_html
+
+
+@admin.register(PayerCodeInfo)
+class PayerCodeInfoAdmin(admin.ModelAdmin):
+    list_display = ('payers', 'payor_category')
+    search_fields = ('payers', 'payor_category')
 
 
 class ExcelDataInline(admin.TabularInline):
@@ -65,7 +71,3 @@ class ExcelDataAdmin(admin.ModelAdmin):
         return format_html(table)
 
     data_display.short_description = "Data"
-
-
-
-
