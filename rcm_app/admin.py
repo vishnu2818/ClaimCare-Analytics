@@ -5,69 +5,23 @@ from django.utils.html import format_html
 
 @admin.register(PayerCodeInfo)
 class PayerCodeInfoAdmin(admin.ModelAdmin):
-    list_display = ('payers', 'payor_category')
-    search_fields = ('payers', 'payor_category')
-
-
-class ExcelDataInline(admin.TabularInline):
-    model = ExcelData
-    extra = 0
-    readonly_fields = ('data_preview',)
-    fields = ('data_preview',)
-
-    def data_preview(self, obj):
-        preview = "<table class='table'><tr><th>Field</th><th>Value</th></tr>"
-        for k, v in obj.data.items():
-            preview += f"<tr><td>{k}</td><td>{v if v is not None else ''}</td></tr>"
-        preview += "</table>"
-        return format_html(preview)
-
-    data_preview.short_description = "Data Preview"
+    list_display = (
+        'payers', 'payor_category', 'edits', 'remarks',
+        'l_codes', 'l_codes_instructions',
+        'e_codes', 'e_codes_instructions',
+        'a_codes', 'a_codes_instructions',
+        'k_codes', 'k_codes_instructions'
+    )
+    search_fields = ('payers', 'payor_category', 'edits', 'remarks')
+    list_filter = ('payers', 'payor_category', 'edits','l_codes','e_codes')
 
 
 @admin.register(ExcelUpload)
 class ExcelUploadAdmin(admin.ModelAdmin):
     list_display = ('file_name', 'uploaded_at', 'row_count')
     readonly_fields = ('columns_preview',)
-    inlines = [ExcelDataInline]
 
     def columns_preview(self, obj):
         return format_html("<br>".join(obj.columns.keys()))
 
     columns_preview.short_description = "Columns"
-
-
-@admin.register(ExcelData)
-class ExcelDataAdmin(admin.ModelAdmin):
-    list_display = ('id', 'upload_link', 'data_preview')
-    list_filter = ('upload',)
-    readonly_fields = ('data_display',)
-    fields = ('upload', 'data_display')
-
-    def upload_link(self, obj):
-        return format_html(
-            '<a href="{}">{}</a>',
-            f'/admin/rcm_app/excelupload/{obj.upload.id}/change/',
-            obj.upload.file_name
-        )
-
-    upload_link.short_description = "Upload"
-    upload_link.admin_order_field = 'upload'
-
-    def data_preview(self, obj):
-        preview_items = list(obj.data.items())[:3]  # Show first 3 fields
-        return format_html("<br>".join(
-            f"<b>{k}:</b> {v if v is not None else ''}"
-            for k, v in preview_items
-        ))
-
-    data_preview.short_description = "Data Preview"
-
-    def data_display(self, obj):
-        table = "<table class='table'><tr><th>Field</th><th>Value</th></tr>"
-        for k, v in obj.data.items():
-            table += f"<tr><td>{k}</td><td>{v if v is not None else ''}</td></tr>"
-        table += "</table>"
-        return format_html(table)
-
-    data_display.short_description = "Data"

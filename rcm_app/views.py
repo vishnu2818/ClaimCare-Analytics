@@ -113,11 +113,126 @@ import pandas as pd
 from .models import ExcelUpload, PayerCodeInfo
 
 
+# @login_required
+# def view_uploaded_data(request, upload_id):
+#     upload = get_object_or_404(ExcelUpload, pk=upload_id)
+#
+#     # Step 1: Load data from DB
+#     queryset = PayerCodeInfo.objects.filter(upload=upload).values(
+#         'payers', 'payor_category', 'edits', 'remarks',
+#         'l_codes', 'l_codes_instructions',
+#         'e_codes', 'e_codes_instructions',
+#         'a_codes', 'a_codes_instructions',
+#         'k_codes', 'k_codes_instructions'
+#     )
+#     df = pd.DataFrame(list(queryset))
+#
+#     # Step 2: Clean Data
+#     expected_columns = [
+#         'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS',
+#         'L_CODES', 'L_CODES_INSTRUCTIONS',
+#         'E_CODES', 'E_CODES_INSTRUCTIONS',
+#         'A_CODES', 'A_CODES_INSTRUCTIONS',
+#         'K_CODES', 'K_CODES_INSTRUCTIONS'
+#     ]
+#     if df.empty:
+#         df = pd.DataFrame(columns=expected_columns)
+#
+#     df.columns = df.columns.str.strip().str.upper()
+#     df.dropna(axis=1, how='all', inplace=True)
+#     df.fillna('', inplace=True)
+#     for col in df.columns:
+#         if df[col].dtype == object:
+#             df[col] = df[col].astype(str).str.strip()
+#
+#     # Step 3: Capture filter values from GET
+#     filters = {
+#         'payer': request.GET.get('payer', '').strip(),
+#         'payor_category': request.GET.get('payor_category', '').strip(),
+#         'edits': request.GET.get('edits', '').strip(),
+#         'code_category': request.GET.get('code_category', '').strip().upper(),
+#         'code_value': request.GET.get('code_value', '').strip().upper()
+#     }
+#
+#     # Step 4: Save unfiltered DataFrame for dropdowns
+#     unfiltered_df = df.copy()
+#
+#     # Step 5: Apply Filters
+#     if filters['payer'] and 'PAYERS' in df.columns:
+#         df = df[df['PAYERS'] == filters['payer']]
+#
+#     if filters['payor_category'] and 'PAYOR_CATEGORY' in df.columns:
+#         df = df[df['PAYOR_CATEGORY'] == filters['payor_category']]
+#
+#     if filters['edits'] and 'EDITS' in df.columns:
+#         df = df[df['EDITS'] == filters['edits']]
+#
+#     # ✅ FIX: Code category filter handling
+#     code_col = filters['code_category']
+#     code_val = filters['code_value']
+#
+#     # ✅ Code filter (e.g., L_CODES, E_CODES, etc.)
+#     if code_col and code_val:
+#         print("Filtering:", code_col, code_val)
+#         if code_col in df.columns:
+#             df[code_col] = df[code_col].astype(str).str.upper().str.strip()
+#
+#             # Apply contains filter and exclude empty or '()'
+#             df = df[
+#                 df[code_col].str.contains(code_val, na=False) &  # contains keyword
+#                 df[code_col].ne('') &  # not empty
+#                 df[code_col].ne('()')  # not ()
+#                 ]
+#         else:
+#             print("⚠️ Code column not found in dataframe:", code_col)
+#
+#     # Step 6: Pagination
+#     paginator = Paginator(df.to_dict(orient='records'), 500)
+#     page_number = request.GET.get('page', 1)
+#     page_obj = paginator.get_page(page_number)
+#
+#     # # Step 7: Clean display data — hide () in template
+#     # for row in page_obj.object_list:
+#     #     for field in ['L_CODES', 'E_CODES', 'A_CODES', 'K_CODES']:
+#     #         if row.get(field, '').strip() == '()':
+#     #             row[field] = ''
+#
+#     # Step 8: Dropdown filter options from unfiltered data
+#     filter_options = {
+#         'payers': sorted(unfiltered_df['PAYERS'].dropna().unique()) if 'PAYERS' in unfiltered_df.columns else [],
+#         'payor_categories': sorted(
+#             unfiltered_df['PAYOR_CATEGORY'].dropna().unique()) if 'PAYOR_CATEGORY' in unfiltered_df.columns else [],
+#         'edits': sorted(unfiltered_df['EDITS'].dropna().unique()) if 'EDITS' in unfiltered_df.columns else [],
+#         'code_categories': [
+#             ('L Codes', 'L_CODES'),
+#             ('E Codes', 'E_CODES'),
+#             ('A Codes', 'A_CODES'),
+#             ('K Codes', 'K_CODES'),
+#         ]
+#     }
+#
+#     context = {
+#         'upload': upload,
+#         'columns': df.columns,
+#         'data_rows': page_obj.object_list,
+#         'page_obj': page_obj,
+#         'selected_filters': filters,
+#         'filter_options': filter_options,
+#     }
+#
+#     return render(request, 'view_data.html', context)
+
+
+from django.core.paginator import Paginator
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+import pandas as pd
+from .models import ExcelUpload, PayerCodeInfo
+
 @login_required
 def view_uploaded_data(request, upload_id):
     upload = get_object_or_404(ExcelUpload, pk=upload_id)
 
-    # Step 1: Load data from DB
     queryset = PayerCodeInfo.objects.filter(upload=upload).values(
         'payers', 'payor_category', 'edits', 'remarks',
         'l_codes', 'l_codes_instructions',
@@ -127,7 +242,6 @@ def view_uploaded_data(request, upload_id):
     )
     df = pd.DataFrame(list(queryset))
 
-    # Step 2: Clean Data
     expected_columns = [
         'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS',
         'L_CODES', 'L_CODES_INSTRUCTIONS',
@@ -145,7 +259,7 @@ def view_uploaded_data(request, upload_id):
         if df[col].dtype == object:
             df[col] = df[col].astype(str).str.strip()
 
-    # Step 3: Capture filter values from GET
+    # Capture Filters
     filters = {
         'payer': request.GET.get('payer', '').strip(),
         'payor_category': request.GET.get('payor_category', '').strip(),
@@ -154,10 +268,9 @@ def view_uploaded_data(request, upload_id):
         'code_value': request.GET.get('code_value', '').strip().upper()
     }
 
-    # Step 4: Save unfiltered DataFrame for dropdowns
     unfiltered_df = df.copy()
 
-    # Step 5: Apply Filters
+    # 5️⃣ Apply Filters
     if filters['payer'] and 'PAYERS' in df.columns:
         df = df[df['PAYERS'] == filters['payer']]
 
@@ -167,32 +280,59 @@ def view_uploaded_data(request, upload_id):
     if filters['edits'] and 'EDITS' in df.columns:
         df = df[df['EDITS'] == filters['edits']]
 
-    if filters['code_category'] and filters['code_value'] and filters['code_category'] in df.columns:
-        df[filters['code_category']] = df[filters['code_category']].astype(str).str.upper()
-        df = df[df[filters['code_category']].str.contains(filters['code_value'], na=False)]
+    # ✅ Code Category and Code Value Filtering
+    code_col = filters['code_category']  # e.g. 'L_CODES'
+    code_val = filters['code_value']  # e.g. 'L123'
+    code_val_upper = code_val.upper()
 
-    # Step 6: Pagination
+    code_columns = ['L_CODES', 'E_CODES', 'A_CODES', 'K_CODES']
+
+    # 🟩 Case 1: Both category and value are provided
+    if code_col and code_val and code_col in df.columns:
+        df[code_col] = df[code_col].astype(str).str.upper().str.strip()
+        df = df[
+            df[code_col].str.contains(code_val_upper, na=False) &
+            df[code_col].ne('') &
+            df[code_col].ne('()')
+            ]
+
+    # 🟨 Case 2: Only code_category selected
+    elif code_col and code_col in df.columns:
+        df[code_col] = df[code_col].astype(str).str.upper().str.strip()
+        df = df[
+            df[code_col].ne('') &
+            df[code_col].ne('()')
+            ]
+
+    # 🟦 Case 3: Only code_value provided (search all code columns)
+    elif code_val:
+        condition = None
+        for col in code_columns:
+            if col in df.columns:
+                df[col] = df[col].astype(str).str.upper().str.strip()
+                match = df[col].str.contains(code_val_upper, na=False)
+                condition = match if condition is None else condition | match
+        if condition is not None:
+            df = df[condition]
+
     paginator = Paginator(df.to_dict(orient='records'), 500)
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
-    # Step 7: Dropdown filter options from unfiltered data
     filter_options = {
         'payers': sorted(unfiltered_df['PAYERS'].dropna().unique()) if 'PAYERS' in unfiltered_df.columns else [],
-        'payor_categories': sorted(
-            unfiltered_df['PAYOR_CATEGORY'].dropna().unique()) if 'PAYOR_CATEGORY' in unfiltered_df.columns else [],
-        'edits': sorted(unfiltered_df['EDITS'].dropna().unique()) if 'EDITS' in unfiltered_df.columns else [],
+        'payor_categories': sorted(unfiltered_df['PAYOR_CATEGORY'].dropna().unique()) if 'PAYOR_CATEGORY' in unfiltered_df.columns else [],
+        'edits': sorted([e for e in unfiltered_df['EDITS'].dropna().unique() if e.strip()]) if 'EDITS' in unfiltered_df.columns else [],
         'code_categories': [
-            ('L Codes', 'L_CODES'),
-            ('E Codes', 'E_CODES'),
-            ('A Codes', 'A_CODES'),
-            ('K Codes', 'K_CODES'),
+            {'label': 'L Codes', 'key': 'L_CODES'},
+            {'label': 'E Codes', 'key': 'E_CODES'},
+            {'label': 'A Codes', 'key': 'A_CODES'},
+            {'label': 'K Codes', 'key': 'K_CODES'},
         ]
     }
 
     context = {
         'upload': upload,
-        'columns': df.columns,
         'data_rows': page_obj.object_list,
         'page_obj': page_obj,
         'selected_filters': filters,

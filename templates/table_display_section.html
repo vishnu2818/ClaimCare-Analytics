@@ -1,0 +1,52 @@
+<!-- rcm_app/templates/rcm_app/table_display_section.html -->
+
+<div class="scroll-buttons">
+    <button onclick="scrollTable(-300)">← Scroll Left</button>
+    <button onclick="scrollTable(300)">Scroll Right →</button>
+</div>
+
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                {% for column in columns %}
+                    <th>{{ column }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% regroup data_rows by PAYERS as payer_groups %}
+            {% for payer in payer_groups %}
+                <tr>
+                    <td>
+                        <strong>{{ payer.grouper }}</strong> ({{ payer.list|length }} items)<br/>
+                        {% if payer.list|length > 1 %}
+                            <div class="toggle-more" onclick="toggleRows('more-{{ forloop.counter }}', this)">
+                                Show {{ payer.list|length|add:"-1" }} more ▼
+                            </div>
+                        {% endif %}
+                    </td>
+                    {% for column in columns|slice:"1:" %}
+                        <td>{{ payer.list.0|get_item:column|default:"" }}</td>
+                    {% endfor %}
+                </tr>
+                {% if payer.list|length > 1 %}
+                    <tbody id="more-{{ forloop.counter }}" class="more-rows">
+                        {% for row in payer.list|slice:"1:" %}
+                            <tr>
+                                <td></td>
+                                {% for column in columns|slice:"1:" %}
+                                    <td>{{ row|get_item:column|default:"" }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <td colspan="{{ columns|length }}">No data available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

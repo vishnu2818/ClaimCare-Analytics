@@ -1,0 +1,30 @@
+<!-- rcm_app/templates/rcm_app/filter_section.html -->
+
+<div class="filter-card">
+    <form method="get" action="">
+        <div class="filter-grid">
+            <div>
+                <label for="cpt_code">CPT Code</label>
+                <input type="text" name="cpt_code" value="{{ selected_filters.cpt_code }}">
+            </div>
+            <div>
+                <label for="dx_code">DX Code</label>
+                <input type="text" name="dx_code" value="{{ selected_filters.dx_code }}">
+            </div>
+            <div>
+                <label for="edit_type">Edit Type</label>
+                <select name="edit_type">
+                    <option value="">-- All --</option>
+                    <option value="A" {% if selected_filters.edit_type == 'A' %}selected{% endif %}>A</option>
+                    <option value="L" {% if selected_filters.edit_type == 'L' %}selected{% endif %}>L</option>
+                    <option value="K" {% if selected_filters.edit_type == 'K' %}selected{% endif %}>K</option>
+                    <option value="E" {% if selected_filters.edit_type == 'E' %}selected{% endif %}>E</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filters-actions">
+            <button type="submit" class="apply-btn">Apply Filters</button>
+        </div>
+    </form>
+</div>
