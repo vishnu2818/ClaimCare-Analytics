@@ -32,11 +32,12 @@ def home(request):
 #                 df = pd.read_excel(file, engine='openpyxl')
 #
 #                 # Normalize columns
-#                 df.columns = df.columns.str.strip().str.upper().str.replace(" ", "_")
+#                 df.columns = df.columns.str.strip().str.upper().str.replace(" ", "_").str.replace("&", "_")
 #
 #                 # Required columns in normalized format
 #                 required_columns = [
 #                     'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS',
+ #                      '',
 #                     'L_CODES', 'L_CODES_INSTRUCTIONS',
 #                     'E_CODES', 'E_CODES_INSTRUCTIONS',
 #                     'A_CODES', 'A_CODES_INSTRUCTIONS',
@@ -75,7 +76,7 @@ def home(request):
 #                         payor_category=convert_value(row['PAYOR_CATEGORY']),
 #                         edits=convert_value(row['EDITS']),
 #                         remarks=convert_value(row['REMARKS']),
-#                         l_codes=convert_value(row['L_CODES']),
+                          #                         l_codes=convert_value(row['L_CODES']),REMARKS
 #                         l_codes_instructions=convert_value(row['L_CODES_INSTRUCTIONS']),
 #                         e_codes=convert_value(row['E_CODES']),
 #                         e_codes_instructions=convert_value(row['E_CODES_INSTRUCTIONS']),
@@ -128,12 +129,12 @@ def upload_excel(request):
                 df = pd.read_excel(file, engine='openpyxl')
 
                 # ✅ Normalize all columns (before any renaming)
-                df.columns = df.columns.str.strip().str.upper().str.replace(" ", "_").str.replace("/", "_").str.replace("-", "_")
+                df.columns = df.columns.str.strip().str.upper().str.replace(" ", "_").str.replace("/", "_").str.replace("-", "_").str.replace("&", "_")
                 print("Normalized headers:", df.columns.tolist())
 
                 # ✅ Define all expected columns
                 expected_columns = [
-                    'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS',
+                    'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS','BILLING_CODING_INSTRUCTIONS',
                     'TYPE', 'CPT_EDITS_SUB_CATEGORY',
                     'L_CODES', 'L_CODES_INSTRUCTIONS',
                     'E_CODES', 'E_CODES_INSTRUCTIONS',
@@ -181,6 +182,7 @@ def upload_excel(request):
                             type=convert_value(row.get('TYPE')),
                             cpt_edits_sub_category=convert_value(row.get('CPT_EDITS_SUB_CATEGORY')),
                             remarks=convert_value(row.get('REMARKS')),
+                            billing_coding_instructions=convert_value(row['BILLING_CODING_INSTRUCTIONS']),
                             l_codes=convert_value(row.get('L_CODES')),
                             l_codes_instructions=convert_value(row.get('L_CODES_INSTRUCTIONS')),
                             e_codes=convert_value(row.get('E_CODES')),
@@ -221,6 +223,7 @@ def view_uploaded_data(request, upload_id):
     queryset = PayerCodeInfo.objects.filter(upload=upload).values(
         'payers', 'payor_category', 'edits', 'remarks',
         'type', 'cpt_edits_sub_category',
+        'billing_coding_instructions',
         'l_codes', 'l_codes_instructions',
         'e_codes', 'e_codes_instructions',
         'a_codes', 'a_codes_instructions',
@@ -230,6 +233,7 @@ def view_uploaded_data(request, upload_id):
 
     expected_columns = [
         'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS',
+        'BILLING_CODING_INSTRUCTIONS',
         'TYPE', 'CPT_EDITS_SUB_CATEGORY',
         'L_CODES', 'L_CODES_INSTRUCTIONS',
         'E_CODES', 'E_CODES_INSTRUCTIONS',
@@ -344,6 +348,7 @@ def download_filtered_excel(request, upload_id):
     # df = pd.DataFrame.from_records(data_qs.values())
     df = pd.DataFrame.from_records(data_qs.values(
         'payers', 'payor_category', 'edits', 'remarks',
+        'billing_coding_instructions',
         'type', 'cpt_edits_sub_category',
         'l_codes', 'l_codes_instructions',
         'e_codes', 'e_codes_instructions',
