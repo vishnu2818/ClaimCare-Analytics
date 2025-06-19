@@ -89,6 +89,7 @@
           <th class="w-48 border border-gray-300 px-2 py-3">Remarks</th>
           <th class="w-48 border border-gray-300 px-2 py-3">Type</th>
           <th class="w-48 border border-gray-300 px-2 py-3">CPT/EDITS Sub-Category</th>
+          <th class="w-48 border border-gray-300 px-2 py-3">BILLING & CODING INSTRUCTIONS</th>
           <th class="w-32 border border-gray-300 px-2 py-3">L Codes</th>
           <th class="w-48 border border-gray-300 px-2 py-3">L Instructions</th>
           <th class="w-32 border border-gray-300 px-2 py-3">E Codes</th>
@@ -107,7 +108,7 @@
             <td class="sticky left-0 bg-gray-100 px-2 py-2 font-bold border border-gray-300">
               {{ group.grouper }}
             </td>
-            <td colspan="13" class="px-2 py-2 border border-gray-300">
+            <td colspan="14" class="px-2 py-2 border border-gray-300">
               <button id="btn-{{ group.grouper|slugify }}" onclick="toggleGroup('{{ group.grouper|slugify }}')"
                 class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded shadow">
                 Show More
@@ -124,6 +125,7 @@
               <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words" title="{{ row.REMARKS }}">{{ row.REMARKS }}</td>
               <td class="border border-gray-300 px-2 py-1">{{ row.TYPE }}</td>
               <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.CPT_EDITS_SUB_CATEGORY }}</td>
+              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.BILLING_CODING_INSTRUCTIONS }}</td>
               <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.L_CODES }}</td>
               <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.L_CODES_INSTRUCTIONS }}</td>
               <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.E_CODES }}</td>
