@@ -39,44 +39,77 @@
     <a href="{% url 'rcm_app:home' %}" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">⬅ Back</a>
   </div>
 
-  <!-- 🔍 Filter Form -->
-  <form method="get" class="flex flex-wrap gap-4 items-center mb-6 bg-white p-4 rounded-lg shadow">
-    <select name="payer" class="px-4 py-2 border rounded">
-      <option value="">-- Select Payer --</option>
+<!-- 🔍 Clean Filter Form -->
+<form method="get" class="bg-white p-4 rounded-lg shadow-sm mb-6">
+
+  <!-- 🔽 4 Dropdowns in 2x2 Grid -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mb-4">
+
+    <select name="payer" class="w-full px-2 py-1 border border-gray-300 rounded">
+      <option value="">Payer</option>
       {% for payer in filter_options.payers %}
         <option value="{{ payer }}" {% if selected_filters.payer == payer %}selected{% endif %}>{{ payer }}</option>
       {% endfor %}
     </select>
 
-    <select name="payor_category" class="px-4 py-2 border rounded">
-      <option value="">-- Select Payor Category --</option>
+    <select name="payor_category" class="w-full px-2 py-1 border border-gray-300 rounded">
+      <option value="">Payor Category</option>
       {% for category in filter_options.payor_categories %}
         <option value="{{ category }}" {% if selected_filters.payor_category == category %}selected{% endif %}>{{ category }}</option>
       {% endfor %}
     </select>
 
-    <select name="edits" class="px-4 py-2 border rounded">
-      <option value="">-- Select Edits --</option>
+    <select name="edits" class="w-full px-2 py-1 border border-gray-300 rounded">
+      <option value="">Edits</option>
       {% for edit in filter_options.edits %}
         <option value="{{ edit }}" {% if selected_filters.edits == edit %}selected{% endif %}>{{ edit }}</option>
       {% endfor %}
     </select>
 
-    <select name="code_category" class="px-4 py-2 border rounded">
-      <option value="">-- Select Code Category --</option>
-      {% for category in filter_options.code_categories %}
-        <option value="{{ category.key }}" {% if selected_filters.code_category == category.key %}selected{% endif %}>
-          {{ category.label }}
-        </option>
+    <select name="edit_type" class="w-full px-2 py-1 border border-gray-300 rounded">
+      <option value="">Edit Type</option>
+      {% for etype in filter_options.edit_types %}
+        <option value="{{ etype }}" {% if selected_filters.edit_type == etype %}selected{% endif %}>{{ etype }}</option>
       {% endfor %}
     </select>
 
-    <input type="text" name="code_value" placeholder="Enter Code Value" value="{{ selected_filters.code_value }}"
-           class="px-4 py-2 border rounded" />
+  </div>
 
-    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Apply</button>
-    <a href="{% url 'rcm_app:view_data' upload.id %}" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Clear</a>
-  </form>
+  <!-- 🔍 Search + Buttons (Single Line Centered) -->
+<div class="flex flex-wrap justify-center items-center gap-3 mt-4">
+
+  <select name="cpt_edits_sub_categories"
+          class="w-48 px-2 py-1 border border-gray-300 rounded text-sm text-center">
+    <option value="">Sub-Category</option>
+    {% for etype in filter_options.cpt_edits_sub_categories %}
+      <option value="{{ etype }}" {% if selected_filters.cpt_edits_sub_categories == etype %}selected{% endif %}>
+        {{ etype }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <input type="text" name="code_search"
+         placeholder="🔎 Enter Code (e.g. A123)"
+         value="{{ request.GET.code_search }}"
+         class="w-48 px-3 py-1 border border-gray-300 rounded text-sm text-center" />
+
+  <button type="submit"
+          class="px-4 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 shadow-sm">
+    Apply
+  </button>
+
+  <a href="{% url 'rcm_app:view_data' upload.id %}"
+     class="px-4 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 shadow-sm">
+    Clear
+  </a>
+</div>
+
+
+
+</form>
+
+
+
 
   <!-- 📊 Data Table -->
   <div class="overflow-x-auto bg-white p-4 shadow rounded">
@@ -86,20 +119,20 @@
           <th class="w-32 sticky left-0 bg-blue-100 border border-gray-300 px-2 py-3">Payer</th>
           <th class="w-32 border border-gray-300 px-2 py-3">Payor Category</th>
           <th class="w-32 border border-gray-300 px-2 py-3">Edits</th>
-          <th class="w-48 border border-gray-300 px-2 py-3">Remarks</th>
-          <th class="w-48 border border-gray-300 px-2 py-3">Type</th>
-          <th class="w-48 border border-gray-300 px-2 py-3">CPT/EDITS Sub-Category</th>
           <th class="w-48 border border-gray-300 px-2 py-3">Edit Type</th>
           <th class="w-48 border border-gray-300 px-2 py-3">Enter Code</th>
+          <th class="w-48 border border-gray-300 px-2 py-3">CPT/EDITS Sub-Category</th>
           <th class="w-48 border border-gray-300 px-2 py-3">BILLING & CODING INSTRUCTIONS</th>
-          <th class="w-32 border border-gray-300 px-2 py-3">L Codes</th>
-          <th class="w-48 border border-gray-300 px-2 py-3">L Instructions</th>
-          <th class="w-32 border border-gray-300 px-2 py-3">E Codes</th>
-          <th class="w-48 border border-gray-300 px-2 py-3">E Instructions</th>
-          <th class="w-32 border border-gray-300 px-2 py-3">A Codes</th>
-          <th class="w-48 border border-gray-300 px-2 py-3">A Instructions</th>
-          <th class="w-32 border border-gray-300 px-2 py-3">K Codes</th>
-          <th class="w-48 border border-gray-300 px-2 py-3">K Instructions</th>
+<!--          <th class="w-48 border border-gray-300 px-2 py-3">Remarks</th>-->
+<!--          <th class="w-48 border border-gray-300 px-2 py-3">Type</th>-->
+<!--          <th class="w-32 border border-gray-300 px-2 py-3">L Codes</th>-->
+<!--          <th class="w-48 border border-gray-300 px-2 py-3">L Instructions</th>-->
+<!--          <th class="w-32 border border-gray-300 px-2 py-3">E Codes</th>-->
+<!--          <th class="w-48 border border-gray-300 px-2 py-3">E Instructions</th>-->
+<!--          <th class="w-32 border border-gray-300 px-2 py-3">A Codes</th>-->
+<!--          <th class="w-48 border border-gray-300 px-2 py-3">A Instructions</th>-->
+<!--          <th class="w-32 border border-gray-300 px-2 py-3">K Codes</th>-->
+<!--          <th class="w-48 border border-gray-300 px-2 py-3">K Instructions</th>-->
         </tr>
       </thead>
       <tbody>
@@ -110,7 +143,7 @@
             <td class="sticky left-0 bg-gray-100 px-2 py-2 font-bold border border-gray-300">
               {{ group.grouper }}
             </td>
-            <td colspan="16" class="px-2 py-2 border border-gray-300">
+            <td colspan="6" class="px-2 py-2 border border-gray-300">
               <button id="btn-{{ group.grouper|slugify }}" onclick="toggleGroup('{{ group.grouper|slugify }}')"
                 class="text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded shadow">
                 Show More
@@ -124,20 +157,20 @@
               <td class="sticky left-0 bg-white border border-gray-300 px-2 py-1">{{ row.PAYERS }}</td>
               <td class="border border-gray-300 px-2 py-1">{{ row.PAYOR_CATEGORY }}</td>
               <td class="border border-gray-300 px-2 py-1">{{ row.EDITS }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words" title="{{ row.REMARKS }}">{{ row.REMARKS }}</td>
-              <td class="border border-gray-300 px-2 py-1">{{ row.TYPE }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.CPT_EDITS_SUB_CATEGORY }}</td>
               <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.EDIT_TYPE }}</td>
               <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.ENTER_CODE }}</td>
+              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.CPT_EDITS_SUB_CATEGORY }}</td>
               <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.BILLING_CODING_INSTRUCTIONS }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.L_CODES }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.L_CODES_INSTRUCTIONS }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.E_CODES }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.E_CODES_INSTRUCTIONS }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.A_CODES }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.A_CODES_INSTRUCTIONS }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.K_CODES }}</td>
-              <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.K_CODES_INSTRUCTIONS }}</td>
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words" title="{{ row.REMARKS }}">{{ row.REMARKS }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1">{{ row.TYPE }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.L_CODES }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.L_CODES_INSTRUCTIONS }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.E_CODES }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.E_CODES_INSTRUCTIONS }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.A_CODES }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.A_CODES_INSTRUCTIONS }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[180px] whitespace-normal break-words">{{ row.K_CODES }}</td>-->
+<!--              <td class="border border-gray-300 px-2 py-1 max-w-[200px] whitespace-normal break-words">{{ row.K_CODES_INSTRUCTIONS }}</td>-->
             </tr>
           {% endfor %}
         {% endfor %}

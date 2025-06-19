@@ -10,10 +10,11 @@ class PayerCodeInfo(models.Model):
     edits = models.TextField(null=True, blank=True)
     edit_type = models.CharField(max_length=100, null=True, blank=True)
     enter_code = models.CharField(max_length=100, null=True, blank=True)
-    type = models.CharField(max_length=100, null=True, blank=True)
     cpt_edits_sub_category = models.CharField(max_length=100, null=True, blank=True)
-    remarks = models.TextField(null=True, blank=True)
     billing_coding_instructions = models.CharField(max_length=100, null=True, blank=True)
+
+    type = models.CharField(max_length=100, null=True, blank=True)
+    remarks = models.TextField(null=True, blank=True)
 
     # L Codes
     l_codes = models.TextField(verbose_name="L Codes", null=True, blank=True)
