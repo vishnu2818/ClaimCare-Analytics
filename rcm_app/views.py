@@ -37,7 +37,7 @@ def home(request):
 #                 # Required columns in normalized format
 #                 required_columns = [
 #                     'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS',
- #                      '',
+#                      '',
 #                     'L_CODES', 'L_CODES_INSTRUCTIONS',
 #                     'E_CODES', 'E_CODES_INSTRUCTIONS',
 #                     'A_CODES', 'A_CODES_INSTRUCTIONS',
@@ -76,7 +76,7 @@ def home(request):
 #                         payor_category=convert_value(row['PAYOR_CATEGORY']),
 #                         edits=convert_value(row['EDITS']),
 #                         remarks=convert_value(row['REMARKS']),
-                          #                         l_codes=convert_value(row['L_CODES']),REMARKS
+#                         l_codes=convert_value(row['L_CODES']),REMARKS
 #                         l_codes_instructions=convert_value(row['L_CODES_INSTRUCTIONS']),
 #                         e_codes=convert_value(row['E_CODES']),
 #                         e_codes_instructions=convert_value(row['E_CODES_INSTRUCTIONS']),
@@ -112,6 +112,8 @@ from .models import ExcelUpload, PayerCodeInfo
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import re
+
 
 @login_required
 def upload_excel(request):
@@ -128,13 +130,20 @@ def upload_excel(request):
                 # ✅ Read Excel file
                 df = pd.read_excel(file, engine='openpyxl')
 
-                # ✅ Normalize all columns (before any renaming)
-                df.columns = df.columns.str.strip().str.upper().str.replace(" ", "_").str.replace("/", "_").str.replace("-", "_").str.replace("&", "_")
-                print("Normalized headers:", df.columns.tolist())
+                # ✅ Normalize column names
+                def normalize_column(col):
+                    col = col.strip()  # Trim spaces
+                    col = re.sub(r'[\s/&\-]+', '_', col)  # Replace space, /, &, - with _
+                    col = re.sub(r'_+', '_', col)  # Replace multiple underscores with a single _
+                    return col.upper()  # Convert to uppercase
+
+                df.columns = [normalize_column(col) for col in df.columns]
+
+                print("✅ Normalized headers:", df.columns.tolist())
 
                 # ✅ Define all expected columns
                 expected_columns = [
-                    'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS','BILLING_CODING_INSTRUCTIONS',
+                    'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS', 'BILLING_CODING_INSTRUCTIONS',
                     'TYPE', 'CPT_EDITS_SUB_CATEGORY',
                     'L_CODES', 'L_CODES_INSTRUCTIONS',
                     'E_CODES', 'E_CODES_INSTRUCTIONS',
@@ -150,7 +159,6 @@ def upload_excel(request):
                 # ✅ Confirm column exists
                 if 'CPT_EDITS_SUB_CATEGORY' not in df.columns:
                     raise ValueError("Column 'CPT/EDITS Sub-Category' not found or not normalized properly")
-
 
                 # ✅ Create upload log entry
                 upload = ExcelUpload.objects.create(
