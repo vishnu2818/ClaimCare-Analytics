@@ -1,0 +1,7 @@
+# render.yaml
+services:
+  - type: web
+    name: ClaimCare-Analytics
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn rcm_analytics.wsgi:application
