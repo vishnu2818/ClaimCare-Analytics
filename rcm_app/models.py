@@ -8,6 +8,8 @@ class PayerCodeInfo(models.Model):
     payers = models.CharField(max_length=100, null=True, blank=True)
     payor_category = models.CharField(max_length=100, null=True, blank=True)
     edits = models.TextField(null=True, blank=True)
+    edit_type = models.CharField(max_length=100, null=True, blank=True)
+    enter_code = models.CharField(max_length=100, null=True, blank=True)
     type = models.CharField(max_length=100, null=True, blank=True)
     cpt_edits_sub_category = models.CharField(max_length=100, null=True, blank=True)
     remarks = models.TextField(null=True, blank=True)

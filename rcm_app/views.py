@@ -144,6 +144,7 @@ def upload_excel(request):
                 # ✅ Define all expected columns
                 expected_columns = [
                     'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS', 'BILLING_CODING_INSTRUCTIONS',
+                    'EDIT_TYPE', 'ENTER_CODE',
                     'TYPE', 'CPT_EDITS_SUB_CATEGORY',
                     'L_CODES', 'L_CODES_INSTRUCTIONS',
                     'E_CODES', 'E_CODES_INSTRUCTIONS',
@@ -188,6 +189,8 @@ def upload_excel(request):
                             payor_category=convert_value(row.get('PAYOR_CATEGORY')),
                             edits=convert_value(row.get('EDITS')),
                             type=convert_value(row.get('TYPE')),
+                            edit_type=convert_value(row.get('EDIT_TYPE')),
+                            enter_code=convert_value(row.get('ENTER_CODE')),
                             cpt_edits_sub_category=convert_value(row.get('CPT_EDITS_SUB_CATEGORY')),
                             remarks=convert_value(row.get('REMARKS')),
                             billing_coding_instructions=convert_value(row['BILLING_CODING_INSTRUCTIONS']),
@@ -230,6 +233,7 @@ def view_uploaded_data(request, upload_id):
 
     queryset = PayerCodeInfo.objects.filter(upload=upload).values(
         'payers', 'payor_category', 'edits', 'remarks',
+        'edit_type','enter_code',
         'type', 'cpt_edits_sub_category',
         'billing_coding_instructions',
         'l_codes', 'l_codes_instructions',
@@ -241,6 +245,7 @@ def view_uploaded_data(request, upload_id):
 
     expected_columns = [
         'PAYERS', 'PAYOR_CATEGORY', 'EDITS', 'REMARKS',
+        'EDIT_TYPE', 'ENTER_CODE',
         'BILLING_CODING_INSTRUCTIONS',
         'TYPE', 'CPT_EDITS_SUB_CATEGORY',
         'L_CODES', 'L_CODES_INSTRUCTIONS',
@@ -356,6 +361,7 @@ def download_filtered_excel(request, upload_id):
     # df = pd.DataFrame.from_records(data_qs.values())
     df = pd.DataFrame.from_records(data_qs.values(
         'payers', 'payor_category', 'edits', 'remarks',
+        'edit_type', 'enter_code',
         'billing_coding_instructions',
         'type', 'cpt_edits_sub_category',
         'l_codes', 'l_codes_instructions',
