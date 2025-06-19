@@ -6,7 +6,8 @@ from django.utils.html import format_html
 @admin.register(PayerCodeInfo)
 class PayerCodeInfoAdmin(admin.ModelAdmin):
     list_display = (
-        'payers', 'payor_category', 'edits', 'remarks',
+        'payers', 'payor_category', 'edits',
+        'remarks', 'cpt_edits_sub_category',
         'l_codes', 'l_codes_instructions',
         'e_codes', 'e_codes_instructions',
         'a_codes', 'a_codes_instructions',

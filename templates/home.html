@@ -37,9 +37,7 @@
     }
 
     .user-area {
-      display: flex;
-      align-items: center;
-      gap: 20px;
+      position: relative;
     }
 
     .user-name {
@@ -48,20 +46,39 @@
       padding: 8px 14px;
       border-radius: 30px;
       font-size: 14px;
+      cursor: pointer;
+      border: none;
     }
 
-    .logout-btn {
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      margin-top: 10px;
+      background-color: var(--white);
+      box-shadow: 0px 4px 10px var(--shadow);
+      border-radius: 6px;
+      z-index: 1000;
+      padding: 10px;
+    }
+
+    .dropdown-item {
       background-color: var(--accent);
-      border: none;
       color: white;
       padding: 8px 14px;
-      border-radius: 4px;
       font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      width: 100%;
+      text-align: left;
       cursor: pointer;
     }
 
-    .logout-btn:hover {
+    .dropdown-item:hover {
       background-color: #2e7d32;
+    }
+
+    .hidden {
+      display: none;
     }
 
     .container {
@@ -70,11 +87,32 @@
       padding: 0 20px;
     }
 
+    .greeting-area {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
     .greeting {
       font-size: 20px;
-      margin-bottom: 25px;
       font-weight: 500;
       color: #333;
+    }
+
+    .upload-btn {
+      background-color: var(--primary);
+      color: white;
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+
+    .upload-btn:hover {
+      background-color: #1565c0;
     }
 
     .card {
@@ -131,9 +169,10 @@
     }
 
     @media (max-width: 600px) {
-      .user-area {
+      .greeting-area {
         flex-direction: column;
-        align-items: flex-end;
+        align-items: flex-start;
+        gap: 10px;
       }
     }
   </style>
@@ -143,16 +182,23 @@
 <header>
   <div class="logo">ClaimCare Analytics</div>
   <div class="user-area">
-    <div class="user-name">👋 {{ request.user.first_name|default:request.user.username }}</div>
-    <form method="post" action="{% url 'rcm_app:logout' %}">
-      {% csrf_token %}
-      <button type="submit" class="logout-btn">Logout</button>
-    </form>
+    <button class="user-name" onclick="toggleDropdown()">
+      👋 {{ request.user.first_name|default:request.user.username }}
+    </button>
+    <div id="userDropdown" class="dropdown-menu hidden">
+      <form method="post" action="{% url 'rcm_app:logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="dropdown-item">Logout</button>
+      </form>
+    </div>
   </div>
 </header>
 
 <div class="container">
-  <div class="greeting">Welcome back, {{ request.user.first_name|default:request.user.username }}!</div>
+  <div class="greeting-area">
+    <div class="greeting">Welcome back, {{ request.user.first_name|default:request.user.username }}!</div>
+    <a href="{% url 'rcm_app:upload_excel' %}" class="upload-btn">Upload Excel</a>
+  </div>
 
   {% if uploads %}
     {% for upload in uploads %}
@@ -169,6 +215,21 @@
     </div>
   {% endif %}
 </div>
+
+<script>
+  function toggleDropdown() {
+    const dropdown = document.getElementById('userDropdown');
+    dropdown.classList.toggle('hidden');
+  }
+
+  document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('userDropdown');
+    const button = document.querySelector('.user-name');
+    if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+</script>
 
 </body>
 </html>
